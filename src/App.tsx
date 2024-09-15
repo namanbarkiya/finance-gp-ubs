@@ -4,6 +4,7 @@ import { useState } from "react";
 import TradeList from "./components/TradeList";
 import DisplayObjects from "./components/DisplayObject";
 import ClearingMemberBalance from "./components/ClearingMemberBalance";
+import CorporateActionButton from "./components/CorporateActionButton";
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
 
             <h1 className="text-3xl">Display</h1>
             <DisplayObjects trades={trades}/>
+            <CorporateActionButton />
 
         </>
     );
