@@ -25,7 +25,7 @@ function App() {
           "Apple": 50,
           "TCS": 100,
         },
-        "funds": 40000
+        "funds": 4000
       },
       "Citibank": { 
         "shares": {
@@ -63,6 +63,14 @@ function App() {
       });
 
       return transactions;
+    };
+
+    const checkNegative = (funds, shares) => {
+      if (funds < 0) return true;
+      for (let key in shares) {
+        if (shares[key] < 0) return true;
+      }
+      return false;
     };
 
     const transactions = calculateTransactions();
@@ -203,15 +211,20 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(balances).map(([member, { funds, shares }]) => (
-                  <tr key={member}>
+                {Object.entries(balances).map(([member, { funds, shares }]) => {
+
+                  const isNegative = checkNegative(funds, shares);
+                  return(
+                    <tr key={member} style={{ backgroundColor: isNegative ? 'red' : 'white' }}>
                     <td>{member}</td>
                     <td>{funds}</td>
                     {allShares.map((share) => (
                       <td key={share}>{shares[share] || 0}</td>
                     ))}
-                  </tr>
-                ))}
+                    </tr>
+                  )
+                  
+                })}
               </tbody>
             </table>
 

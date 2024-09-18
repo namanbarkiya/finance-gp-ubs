@@ -29,7 +29,7 @@ const ClearingMemberBalance = ({ balances, setBalances }) => {
         setFunds(0);
         setShares({});
     };
-
+        
     return (
         <div>
             <h2 className="text-2xl font-semibold">Clearing Member Balances</h2>
