@@ -8,91 +8,10 @@ const trades = new Map<string, number>([
   ["WXY company ltd.", 50]
 ]);
 
-// The JSON object representing organizations and their shares
-const organizations = {
-  "Morgan Stanley": { 
-    "share": {
-      "Apple": 50,
-      "TCS": 100
-    },
-    "funds": 2500
-  },
-  "Citibank": { 
-    "share": {
-      "MRF": 200,
-      "Apple": 500
-    },
-    "funds": 31000
-  }
-};
 
-// Function to apply dividends and update funds for all organizations
-function applyDividends(tradeCompany: string, dividend: number) {
-  Object.keys(organizations).forEach((orgName) => {
-    const org = organizations[orgName];
-    const shares = org.share[tradeCompany];
-    const currentPrice = trades.get(tradeCompany);
 
-    if (shares && currentPrice) {
-      // Calculate the dividend value to add to funds
-      const dividendValue = (dividend / 100) * (shares * currentPrice);
-      org.funds += dividendValue;
+const CorporateActionButton: React.FC = ({balances, setBalances, triggerChange}) => {
 
-      console.log(`Updated funds for ${orgName} after dividend: ${org.funds}`);
-    } else {
-      console.log(`No shares for ${tradeCompany} in ${orgName}`);
-    }
-  });
-
-  // Display the updated organizations object
-  console.log("Updated Organizations Object after Dividend:", JSON.stringify(organizations, null, 2));
-}
-
-// Function to apply stock splits, update share counts for all organizations, and update stock price
-function applyStockSplit(tradeCompany: string, splitRatio: string) {
-  const [numerator, denominator] = splitRatio.split(":").map(Number);
-
-  if (!numerator || !denominator || isNaN(numerator) || isNaN(denominator)) {
-    console.log(`Invalid split ratio: ${splitRatio}`);
-    return;
-  }
-
-  // Iterate over all organizations to update share counts
-  Object.keys(organizations).forEach((orgName) => {
-    const org = organizations[orgName];
-    const shares = org.share[tradeCompany];
-
-    if (shares) {
-      // Multiply the current shares by the split ratio
-      org.share[tradeCompany] = shares * (numerator / denominator);
-
-      console.log(
-        `Updated shares for ${tradeCompany} in ${orgName}: ${org.share[tradeCompany]}`
-      );
-    } else {
-      console.log(`${orgName} does not hold shares in ${tradeCompany}`);
-    }
-  });
-
-  // Update the stock price in the trades map based on the split ratio
-  const currentPrice = trades.get(tradeCompany);
-  if (currentPrice) {
-    const newPrice = currentPrice * (denominator / numerator); // New price after stock split
-    trades.set(tradeCompany, newPrice);
-
-    console.log(
-      `Updated price for ${tradeCompany} after split: ${newPrice}`
-    );
-  } else {
-    console.log(`Trade company ${tradeCompany} not found in trades map`);
-  }
-
-  // Display the updated organizations and trades objects
-  console.log("Updated Organizations Object after Stock Split:", JSON.stringify(organizations, null, 2));
-  console.log("Updated Trades Map after Stock Split:", JSON.stringify([...trades], null, 2));
-}
-
-const CorporateActionButton: React.FC = () => {
   const [action, setAction] = useState<"dividend" | "split" | null>(null);
   const [tradeCompany, setTradeCompany] = useState<string>("");
   const [dividend, setDividend] = useState<number>(0);
@@ -117,6 +36,7 @@ const CorporateActionButton: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (action === "dividend") {
+      
       applyDividends(tradeCompany, dividend);
       alert("Dividend applied and funds updated for all relevant organizations.");
     } else if (action === "split") {
@@ -125,6 +45,82 @@ const CorporateActionButton: React.FC = () => {
     }
     handleCloseModal(); // Close the modal after submission
   };
+
+  const applyDividends = (tradeCompany: string, dividend: number) =>{
+
+    // console.log("Received balance", organizations);
+    const organizations = JSON.parse(JSON.stringify(balances));
+    Object.keys(organizations).forEach((orgName) => {
+      const org = organizations[orgName];
+      const shares = org.shares[tradeCompany];
+      const currentPrice = trades.get(tradeCompany);
+  
+      if (shares && currentPrice) {
+        // Calculate the dividend value to add to funds
+        const dividendValue = (dividend / 100) * (shares * currentPrice);
+        org.funds += dividendValue;
+  
+        console.log(`Updated funds for ${orgName} after dividend: ${org.funds}`);
+      } else {
+        console.log(`No shares for ${tradeCompany} in ${orgName}`);
+      }
+    });
+  
+    // Display the updated organizations object
+      
+    setBalances(organizations);
+    // triggerChange();
+    console.log("Updated Organizations Object after Dividend:", JSON.stringify(organizations, null, 2));
+    console.log("Updated balances", balances);
+  }
+
+  const applyStockSplit =(tradeCompany: string, splitRatio: string) =>{
+
+    const organizations = JSON.parse(JSON.stringify(balances));
+
+    const [numerator, denominator] = splitRatio.split(":").map(Number);
+
+    if (!numerator || !denominator || isNaN(numerator) || isNaN(denominator)) {
+      console.log(`Invalid split ratio: ${splitRatio}`);
+      return;
+    }
+
+    // Iterate over all organizations to update share counts
+    Object.keys(organizations).forEach((orgName) => {
+      const org = organizations[orgName];
+      const shares = org.shares[tradeCompany];
+
+      if (shares) {
+        // Multiply the current shares by the split ratio
+        org.shares[tradeCompany] = shares * (numerator / denominator);
+
+        console.log(
+          `Updated shares for ${tradeCompany} in ${orgName}: ${org.shares[tradeCompany]}`
+        );
+      } else {
+        console.log(`${orgName} does not hold shares in ${tradeCompany}`);
+      }
+
+      setBalances(organizations);
+  });
+
+  // Update the stock price in the trades map based on the split ratio
+  const currentPrice = trades.get(tradeCompany);
+  if (currentPrice) {
+    const newPrice = currentPrice * (denominator / numerator); // New price after stock split
+    trades.set(tradeCompany, newPrice);
+
+    console.log(
+      `Updated price for ${tradeCompany} after split: ${newPrice}`
+    );
+  } else {
+    console.log(`Trade company ${tradeCompany} not found in trades map`);
+  }
+
+  // Display the updated organizations and trades objects
+  console.log("Updated Organizations Object after Stock Split:", JSON.stringify(organizations, null, 2));
+  console.log("Updated Trades Map after Stock Split:", JSON.stringify([...trades], null, 2));
+  }
 
   const buttonStyle: React.CSSProperties = {
     marginRight: "10px",
@@ -160,6 +156,34 @@ const CorporateActionButton: React.FC = () => {
       <button style={buttonStyle} onClick={handleSplitClick}>
         Stock Split
       </button>
+
+      {/* <table border="1">
+              <thead>
+                <tr>
+                  <th>Share Name</th>
+                  <th>Current Price</th>
+                  
+                </tr>
+                <tr>
+                  <th></th>
+                  <th></th>
+                  {trades.map((share, index) => (
+                    <th key={index}>{share}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(balances).map(([member, { funds, shares }]) => (
+                  <tr key={member}>
+                    <td>{member}</td>
+                    <td>{funds}</td>
+                    {allShares.map((share) => (
+                      <td key={share}>{shares[share] || 0}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+      </table> */}
 
       {action && (
         <div className="modal-overlay">

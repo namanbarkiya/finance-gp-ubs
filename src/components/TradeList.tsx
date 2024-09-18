@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
 
-const TradeList = ({ trades, setTrades }) => {
+const TradeList = ({ trades, setTrades, triggerChange }) => {
     const [trade, setTrade] = useState({
         memberA: "",
         memberB: "",
@@ -13,6 +13,7 @@ const TradeList = ({ trades, setTrades }) => {
 
     const handleAddTrade = () => {
         setTrades([...trades, trade]);
+        // triggerChange();
         setTrade({
             memberA: "",
             memberB: "",
