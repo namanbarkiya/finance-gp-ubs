@@ -17,6 +17,13 @@ const CorporateActionButton: React.FC = ({balances, setBalances, triggerChange})
   const [dividend, setDividend] = useState<number>(0);
   const [splitRatio, setSplitRatio] = useState<string>("");
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Function to open/close the modal
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   const handleDividendClick = () => {
     setAction("dividend");
     setTradeCompany("");
@@ -148,6 +155,29 @@ const CorporateActionButton: React.FC = ({balances, setBalances, triggerChange})
     cursor: "pointer",
   };
 
+  const modalStyles = {
+    overlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000,
+    },
+    modal: {
+      backgroundColor: '#fff',
+      padding: '20px',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+      width: '400px',
+      textAlign: 'center',
+    },
+  };
+
   return (
     <div>
       <button style={buttonStyle} onClick={handleDividendClick}>
@@ -157,33 +187,34 @@ const CorporateActionButton: React.FC = ({balances, setBalances, triggerChange})
         Stock Split
       </button>
 
-      {/* <table border="1">
+      <button onClick={toggleModal}>Get Current Price</button>
+
+      {/* Modal for displaying the table */}
+      {isModalOpen && (
+        <div style={modalStyles.overlay}>
+          <div style={modalStyles.modal}>
+            <h2>Current Prices</h2>
+            <table border="1">
               <thead>
                 <tr>
                   <th>Share Name</th>
                   <th>Current Price</th>
-                  
-                </tr>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  {trades.map((share, index) => (
-                    <th key={index}>{share}</th>
-                  ))}
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(balances).map(([member, { funds, shares }]) => (
-                  <tr key={member}>
-                    <td>{member}</td>
-                    <td>{funds}</td>
-                    {allShares.map((share) => (
-                      <td key={share}>{shares[share] || 0}</td>
-                    ))}
+                {[...trades.entries()].map(([shareName, price]) => (
+                  <tr key={shareName}>
+                    <td>{shareName}</td>
+                    <td>{price}</td>
                   </tr>
                 ))}
               </tbody>
-      </table> */}
+            </table>
+            {/* Button to close the modal */}
+            <button onClick={toggleModal}>Close</button>
+          </div>
+        </div>
+      )}
 
       {action && (
         <div className="modal-overlay">
