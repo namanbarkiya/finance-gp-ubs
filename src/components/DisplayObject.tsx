@@ -1,25 +1,20 @@
-import React from 'react';
+import Modal from "./ui/Modal";
+import Table from "./ui/Table";
 
-const DisplayObjects = ({trades}) => {
+const DisplayObjects = ({ trades }) => {
+    const columns = [
+        { header: "Buyer", accessor: "memberA" },
+        { header: "Seller", accessor: "memberB" },
+        { header: "Company", accessor: "company" },
+        { header: "Shares", accessor: "shares" },
+        { header: "Price", accessor: "price" },
+    ];
 
-//   const data = [
-//     { id: 1, name: 'John Doe', age: 28 },
-//     { id: 2, name: 'Jane Smith', age: 34 },
-//     { id: 3, name: 'Alice Johnson', age: 45 }
-//   ];
-
-  return (
-    <div>
-      <h2>User List</h2>
-      <ul>
-        {trades.map((trade) => (
-          <li>
-            {trade.memberA} - {trade.memberB} - {trade.company} - {trade.shares} - {trade.price}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <Modal header="Trade Details" buttonText="Trade Details">
+            <Table columns={columns} data={trades} />
+        </Modal>
+    );
 };
 
 export default DisplayObjects;

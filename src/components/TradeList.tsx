@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from "./ui/Input";
 import Button from "./ui/Button";
+import { trades as stocksList } from "./CorporateActionButton";
 
 const TradeList = ({ trades, setTrades, triggerChange }) => {
     const [trade, setTrade] = useState({
@@ -25,12 +26,7 @@ const TradeList = ({ trades, setTrades, triggerChange }) => {
 
     return (
         <div>
-            <h2 className="text-2xl font-semibold">Trade List</h2>
-            {/* <input type="text" placeholder="Buyer" value={trade.memberA} onChange={(e) => setTrade({ ...trade, memberA: e.target.value })} />
-      <input type="text" placeholder="Seller" value={trade.memberB} onChange={(e) => setTrade({ ...trade, memberB: e.target.value })} />
-      <input type="text" placeholder="Company" value={trade.company} onChange={(e) => setTrade({ ...trade, company: e.target.value })} />
-      <input type="number" placeholder="Shares" value={trade.shares} onChange={(e) => setTrade({ ...trade, shares: +e.target.value })} />
-      <input type="number" placeholder="Price" value={trade.price} onChange={(e) => setTrade({ ...trade, price: +e.target.value })} /> */}
+            <h2 className="text-2xl font-semibold">Trade Action</h2>
 
             <div className="flex gap-4">
                 <Input
@@ -56,7 +52,11 @@ const TradeList = ({ trades, setTrades, triggerChange }) => {
                     placeholder="Company"
                     value={trade.company}
                     onChange={(e) =>
-                        setTrade({ ...trade, company: e.target.value })
+                        setTrade({
+                            ...trade,
+                            company: e.target.value,
+                            price: stocksList.get(e.target.value) || 0,
+                        })
                     }
                     label="Company"
                 />
@@ -76,6 +76,7 @@ const TradeList = ({ trades, setTrades, triggerChange }) => {
                     onChange={(e) =>
                         setTrade({ ...trade, price: +e.target.value })
                     }
+                    disabled
                     label="Price"
                 />
             </div>

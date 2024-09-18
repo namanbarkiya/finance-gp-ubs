@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
+import Modal from "./ui/Modal";
 
 const ClearingMemberBalance = ({ balances, setBalances }) => {
     const [member, setMember] = useState("");
@@ -29,7 +30,7 @@ const ClearingMemberBalance = ({ balances, setBalances }) => {
         setFunds(0);
         setShares({});
     };
-        
+
     return (
         <div>
             <h2 className="text-2xl font-semibold">Clearing Member Balances</h2>
@@ -81,75 +82,31 @@ const ClearingMemberBalance = ({ balances, setBalances }) => {
 
             <Button onClick={handleAddBalance} buttonText="Submit Balance" />
 
-            <button
-                onClick={() => setModalOpen(!modalOpen)}
-                className="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 my-2 h-fit"
-                type="button"
+            {/* <Modal
+                buttonText="View Clearing Member Balance"
+                header="Current Balance of Clearing Member"
             >
-                View Member Balance
-            </button>
-
-            {modalOpen ? (
-                <div className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-full max-h-full bg-black bg-opacity-50">
-                    <div className="relative p-4 w-full max-w-2xl max-h-full">
-                        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700 min-h-60">
-                            <div className="text-white">
-                                <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                        Current Balance
-                                    </h3>
-                                    <button
-                                        type="button"
-                                        className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                        onClick={() => setModalOpen(false)}
-                                    >
-                                        <svg
-                                            className="w-3 h-3"
-                                            aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 14 14"
-                                        >
-                                            <path
-                                                stroke="currentColor"
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                stroke-width="2"
-                                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                                            />
-                                        </svg>
-                                        <span className="sr-only">
-                                            Close modal
-                                        </span>
-                                    </button>
-                                </div>
-                                {Object.entries(balances).map(
-                                    ([member, { funds, shares }]) => (
-                                        <div
-                                            key={member}
-                                            className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
-                                        >
-                                            <h3 className="font-semibold text-gray-900 dark:text-white">
-                                                {member}
-                                            </h3>
-                                            <p>Funds: {funds}</p>
-                                            <p>
-                                                {Object.entries(shares).map(
-                                                    ([symbol, quantity]) => (
-                                                        <p key={symbol}>
-                                                            {symbol}: {quantity}
-                                                        </p>
-                                                    )
-                                                )}
-                                            </p>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        </div>
+                {Object.entries(balances).map(([member, { funds, shares }]) => (
+                    <div
+                        key={member}
+                        className="flex items-center justify-between p-4 md:p-5 border-b rounded-t"
+                    >
+                        <h3 className="font-semibold text-gray-900">
+                            {member}
+                        </h3>
+                        <p>Funds: {funds}</p>
+                        <p>
+                            {Object.entries(shares).map(
+                                ([symbol, quantity]) => (
+                                    <p key={symbol}>
+                                        {symbol}: {quantity}
+                                    </p>
+                                )
+                            )}
+                        </p>
                     </div>
-                </div>
-            ) : null}
+                ))}
+            </Modal> */}
         </div>
     );
 };
